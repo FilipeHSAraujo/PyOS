@@ -3,6 +3,9 @@
 ![Status](https://img.shields.io/badge/Status-Educacional-blue)
 ![Python](https://img.shields.io/badge/Python-3.x-green)
 
+## Aluno:Vinícius Gaspar de Araújo Silva 01797364
+
+
 Este repositório contém o **PyOS**, um simulador lógico de Sistema Operacional desenvolvido em Python para fins didáticos. O projeto foi desenhado para cobrir os conceitos fundamentais das **Unidades I e II** da disciplina de Sistemas Operacionais, permitindo que alunos explorem a mecânica interna de um Kernel sem a complexidade de linguagens de baixo nível.
 
 ## 🎯 Objetivos Pedagógicos
