@@ -10,6 +10,7 @@ import random
 # Tabela global de processos (Nossa "RAM")
 tabela_processos = []
 pid_counter = 1000  # PIDs na vida real começam em 1000 
+MAX_PROCESSOS = 5  # Limite de processos para simular falta de memória
 
 class PCB:
     """Bloco Descritor de Processo (Process Control Block)"""
@@ -35,10 +36,19 @@ def boot():
     time.sleep(0.5)
     print("Bem-vindo ao terminal. Digite 'help' para comandos.\n")
 
+
+
 def spawn_process(nome):
     """Cria um novo processo e adiciona na tabela (RAM)"""
+
+    # Verifica limite de memória/processos
+    if len(tabela_processos) >= MAX_PROCESSOS:
+        print("ERRO! Limite de processos atingido.")
+        return
+
     novo_processo = PCB(nome)
     tabela_processos.append(novo_processo)
+
     print(f"[Kernel] Processo '{nome}' criado com PID {novo_processo.pid}")
 
 def escalonador_tick():
@@ -49,7 +59,6 @@ def escalonador_tick():
         print("[CPU] Ociosa (Idle). Nenhum processo na fila de prontos.")
         return
 
-    # Pega o primeiro processo da fila
     processo_atual = prontos[0]
     
     # CHAVEAMENTO DE CONTEXTO: Entrando na CPU
@@ -73,6 +82,17 @@ def escalonador_tick():
         tabela_processos.remove(processo_atual)
         tabela_processos.append(processo_atual)
         print(f"[Kernel] Chaveamento de contexto. PID {processo_atual.pid} pausado e movido para o fim da fila.")
+
+def run_scheduler():
+    """Executa automaticamente a CPU até todos os processos terminarem"""
+
+    print("[Kernel] Iniciando execução automática da CPU...\n")
+
+    while len(tabela_processos) > 0:
+        escalonador_tick()
+        time.sleep(0.5)
+
+    print("\n[Kernel] Todos os processos foram finalizados.")
 
 # ==========================================
 # INTERFACE COM O USUÁRIO (SHELL)
@@ -138,6 +158,8 @@ def shell():
                     
             elif acao == "cpu":
                 escalonador_tick()
+            elif acao == "run":
+                run_scheduler()
                 
             else:
                 print(f"bash: {acao}: comando não encontrado. Digite 'help'.")
